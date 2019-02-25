@@ -1,0 +1,16 @@
+===========================================
+ SqlServer 
+============================================
+
+1. Criar a pasta lib no projeto.
+	1.1 Observação deve ser criada fora do SRC;
+	1.2 Incluir o drive na pasta;
+2. Importar o Drive.
+	2.1 Clicar em JRE System > Build Path > Configure Build Path;
+	2.2 Selecionar a pasta lib e confirmar;
+3. Abrir a porta de conexão SQL
+	3.1 Acessar o programa SQL Server Configuration Manager;
+	3.2 Selecionar a instancia;
+	3.3 Habilitar a porta tcp;
+	3.4 Em Propriedade informar a porta 1433
+	3.5 Novamente no sql, reiniciar a instacia;
