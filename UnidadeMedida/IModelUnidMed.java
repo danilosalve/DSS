@@ -1,7 +1,5 @@
 package UnidadeMedida;
 
-import java.util.ArrayList;
-
 /**
  * Interface - contem os metodos utilizados no objeto Model Unidade de Medida
  * @author Danilo Salve

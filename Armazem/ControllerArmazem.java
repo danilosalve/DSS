@@ -1,49 +1,33 @@
-package UnidadeMedida;
+package Armazem;
 
 import javax.swing.JOptionPane;
 
 /**
- * Classe Controller - Implementação da regra de negocio
+ * Interface - objeto Controller Unidade de Medida
  * @author Danilo Salve
  * @since 23/02/2019
  * @version 1.0
  */
-
-public class ControllerUnidMed implements IControllerUnidMed {
-	private final IUnidMedDao oDao = new UnidMedDao();
+public class ControllerArmazem implements IControllerArmazem {
+	
+	private final IArmazemDao oDao = new ArmazemDao();
 	/**
 	 * Valida ação antes de executar o commit dos dados
 	 * @autor Danilo Salve
-	 * @since 23/02/2019
-	 * @param IModelUnidMed oModel 
+	 * @since 25/02/2019
+	 * @param IModelArmazem oModel 
 	 * @param int nOpc - Ação a ser executada
 	 * @version 1.0
 	 */
 	@Override
-	public boolean VldCommit(IModelUnidMed oModel, int nOpc) {
-		
-		boolean lRet = true;		
-		
-		if (nOpc == 3 || nOpc == 4){
-			if (lRet & oModel.getCod().isEmpty()){
-				JOptionPane.showMessageDialog(null, "Um ou mais campos obrigatorios"
-	    				+ "\nNão foram preenchidos."
-						+ "\nCampo: Codigo","CAMPO OBRIGATORIO",JOptionPane.ERROR_MESSAGE);
-				lRet = false;
-			}
-			
+	public boolean VldCommit(IModelArmazem oModel, int nOpc) {
+		boolean lRet = true;
+		if (nOpc == 3 || nOpc == 4){			
 			if (lRet & oModel.getDesc().isEmpty()){
 				JOptionPane.showMessageDialog(null, "Um ou mais campos obrigatorios"
 	    				+ "\nNão foram preenchidos."
 						+ "\nCampo: Descrição","CAMPO OBRIGATORIO",JOptionPane.ERROR_MESSAGE);
 				lRet = false;
-			}
-			
-			if (lRet & nOpc == 3 & oDao.ExistUnidMed(oModel.getCod())){
-				lRet = false;
-				JOptionPane.showMessageDialog(null, "ATENÇÃO"
-	    				+ "\n Já existe Unidade de Medida "
-						+ "\n Informada com Codigo " + oModel.getCod(),"EXISTE",JOptionPane.ERROR_MESSAGE);
 			}
 		}		
 		return lRet;
@@ -51,14 +35,13 @@ public class ControllerUnidMed implements IControllerUnidMed {
 	/**
 	 * Executa o commit dos dados
 	 * @autor Danilo Salve
-	 * @since 23/02/2019
+	 * @since 25/02/2019
 	 * @param IModelUnidMed oModel 
 	 * @param int nOpc - Ação a ser executada
 	 * @version 1.0
 	 */
 	@Override
-	public boolean ExecCommit(IModelUnidMed oModel, int nOpc) {
-
+	public boolean ExecCommit(IModelArmazem oModel, int nOpc) {
 		boolean lRet = true;
 		
 		switch (nOpc){
@@ -88,5 +71,7 @@ public class ControllerUnidMed implements IControllerUnidMed {
 			break;
 		}		
 		return lRet;
+
 	}
+
 }

@@ -15,6 +15,7 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
+import Armazem.BrwArmazem;
 import UnidadeMedida.BrwUnidMed;
 
 /**
@@ -33,6 +34,7 @@ public class Menu extends JFrame implements ActionListener, TreeSelectionListene
    private final JTree tree = new JTree();
    private JTextField txProcurar = new JTextField();
    private BrwUnidMed oModelUM;
+   private BrwArmazem oBrowseAmz;
    public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -90,7 +92,7 @@ public class Menu extends JFrame implements ActionListener, TreeSelectionListene
   
 	  txProcurar.setBounds(250,010,600,050);
 	  txProcurar.setText(" Digite aqui para procurar um programa");
-	  txProcurar.setToolTipText("Procurar um procurar");
+	  txProcurar.setToolTipText("Procurar um programa");
 	  txProcurar.addActionListener(this);
 	  txProcurar.addMouseListener(this);
 	  txProcurar.setForeground(Color.lightGray);
@@ -103,17 +105,23 @@ public class Menu extends JFrame implements ActionListener, TreeSelectionListene
 					private static final long serialVersionUID = 1L;
 
 					{
+						DefaultMutableTreeNode nEstoque;
 						DefaultMutableTreeNode nSuprimentos;
 						DefaultMutableTreeNode nCRM;
-						nSuprimentos = new DefaultMutableTreeNode("Suprimentos");
-							nSuprimentos.add(new DefaultMutableTreeNode("Locais de Armazenamento"));
-							nSuprimentos.add(new DefaultMutableTreeNode("Unidade de Medida"));
-						add(nSuprimentos);
 						nCRM = new DefaultMutableTreeNode("CRM");
 							nCRM.add(new DefaultMutableTreeNode("Pessoas"));
 							nCRM.add(new DefaultMutableTreeNode("Contatos"));
 							nCRM.add(new DefaultMutableTreeNode("Endereços"));
 						add(nCRM);
+						nEstoque = new DefaultMutableTreeNode("Estoque");
+							nEstoque.add(new DefaultMutableTreeNode("Saldo"));
+							nEstoque.add(new DefaultMutableTreeNode("Requisição"));
+						add(nEstoque);
+						nSuprimentos = new DefaultMutableTreeNode("Suprimentos");
+							nSuprimentos.add(new DefaultMutableTreeNode("Armazem"));
+							nSuprimentos.add(new DefaultMutableTreeNode("Produto"));							
+							nSuprimentos.add(new DefaultMutableTreeNode("Unidade de Medida"));
+						add(nSuprimentos);
 					}
 				}
 			));
@@ -183,8 +191,19 @@ public class Menu extends JFrame implements ActionListener, TreeSelectionListene
 					centralizaForm(oModelUM);
 					jdPane.add(oModelUM);
 				}
-
-			break;
+				break;
+			case "ARMAZEM":
+				oBrowseAmz = new BrwArmazem();
+				
+				if(!oBrowseAmz.isVisible()){
+					oBrowseAmz.setVisible(true);
+					centralizaForm(oBrowseAmz);
+					jdPane.add(oBrowseAmz);
+				} else {
+					centralizaForm(oBrowseAmz);
+					jdPane.add(oBrowseAmz);
+				}
+				break;			
 			default:
 				JOptionPane.showMessageDialog(null, "Dados não encontrados", "Não há dados", JOptionPane.INFORMATION_MESSAGE);
 			}
@@ -216,7 +235,19 @@ public class Menu extends JFrame implements ActionListener, TreeSelectionListene
 				centralizaForm(oModelUM);
 				jdPane.add(oModelUM);
 			}
-		break;				
+		break;
+		case "Armazem":
+			oBrowseAmz = new BrwArmazem();
+			
+			if(!oBrowseAmz.isVisible()){
+				oBrowseAmz.setVisible(true);
+				centralizaForm(oBrowseAmz);
+				jdPane.add(oBrowseAmz);
+			} else {
+				centralizaForm(oBrowseAmz);
+				jdPane.add(oBrowseAmz);
+			}
+		break;
 		}		
 	}
 

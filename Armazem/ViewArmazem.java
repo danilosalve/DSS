@@ -1,4 +1,4 @@
-package UnidadeMedida;
+package Armazem;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
@@ -17,39 +18,39 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.table.DefaultTableModel;
 
+import UnidadeMedida.IUnidMedDao;
+import UnidadeMedida.UnidMedDao;
+import Armazem.BrwArmazem.ArmazemTableModel;
 import Framework.TamanhoFixoJTextField;
-import UnidadeMedida.BrwUnidMed.UnidMedTableModel;
 
 /**
  * View Cadastro de Unidade de Medida * 
- * @since 17/02/2019
+ * @since 25/02/2019
  * @author Danilo Salve
  * @param nOpc Ação a ser executada (2 - Visual, 3 - Inclui, 4 - Altera e 5 Exclui)
- * @see package.UnidadeMedida
+ * @see package.Armazem
  * @see method
  */
-public class ViewUnidMed extends JInternalFrame implements ActionListener{
+
+public class ViewArmazem extends JInternalFrame implements ActionListener{
 	
 	private JPanel 	oPanel 		 = new JPanel();
 	private JButton oBtCancel	 = new JButton("Cancelar");
 	private JButton oBtCommit	 = new JButton("Confirmar");	
-	private JLabel  oLbId   	 = new JLabel("Id: ");
-	private JLabel  oLbCod       = new JLabel("Codigo: ");
+	private JLabel  oLbId   	 = new JLabel("Id: ");	
 	private JLabel  oLbDesc      = new JLabel("Descrição: ");	
-	private JTextField oTxId 	 = new JTextField();
-	private JTextField oTxCod	 = new JTextField(2);
+	private JTextField oTxId 	 = new JTextField(6);
 	private JTextField oTxDesc	 = new JTextField(30);
-	private IModelUnidMed oModel = new ModelUnidMed();
-	private IControllerUnidMed oControl = new ControllerUnidMed();
-	private UnidMedTableModel oBrowse;
-	
+	private JCheckBox oChkBlql   = new JCheckBox("Bloqueado");
+	private IModelArmazem oModel = new ModelArmazem();
+	private IControllerArmazem oControl = new ControllerArmazem();
+	private ArmazemTableModel oBrowse;
 	//Define o posicionamento inicial dos objetos na tela
 	private int posX1 = 50, posX2 = 130, posX3 = posX2 - 10, posY = 0,alt = 30, sep = 20;
 	private int nOpcx = 0;
 	
-	public ViewUnidMed(int nOpc, int nReg, UnidMedTableModel md){		
-	
-		super(" Unidade de Medida | DSS", false, false ,false , true );  
+	public ViewArmazem(int nOpc, int nReg, ArmazemTableModel md){
+		super(" Armazem | DSS", false, false ,false , true );  
         this.setSize(800, 590); 
         
 		getContentPane().setLayout(null);		
@@ -66,17 +67,16 @@ public class ViewUnidMed extends JInternalFrame implements ActionListener{
 	    });
 	    //adiciona objetos ao oPanel 
 	    oPanel.add(oLbId);
-	    oPanel.add(oLbCod);
 	    oPanel.add(oLbDesc);
 	    oPanel.add(oTxId);
-	    oPanel.add(oTxCod);
+	    oPanel.add(oChkBlql);
 	    oPanel.add(oTxDesc);
 	    
 	    //define se campo é editavel
 	    oTxId.setEditable(false);
 	    
 	    if ( nOpc == 2 || nOpc == 5 ) {
-	    	oTxCod.setEditable(false);
+	    	oChkBlql.setEnabled(false);
 	    	oTxDesc.setEditable(false);	    
 	    }
 	   
@@ -85,26 +85,23 @@ public class ViewUnidMed extends JInternalFrame implements ActionListener{
 		oLbId.setBounds(posX1, posY, 20, alt);  
 		oTxId.setBounds(posX2,posY,60,alt);		
 		posY += alt + sep; 
-		oLbCod.setBounds(posX1, posY, 100, alt);
-		oTxCod.setBounds(posX2,posY,60,alt);		
-		posY += alt + sep; 
 		oLbDesc.setBounds(posX1, posY, 100, alt);  
 		oTxDesc.setBounds(posX2,posY,600,alt);
+		posY += alt + sep; 
+		oChkBlql.setBounds(posX1, posY, 100, alt);
 		
-		//define o tooltip
-		oTxCod.setToolTipText("Informe o codigo da unidade de medida");
+		//define o tooltip		
 		oTxDesc.setToolTipText("Informe a descrição da unidade de medida");
+		oChkBlql.setToolTipText("Informe o Registro está bloquado para uso");
 		
 		//define o tamanho maximo aceito no JTextField
-        oTxCod.setDocument(new TamanhoFixoJTextField(2));
         oTxDesc.setDocument(new TamanhoFixoJTextField(30));
 		
 		//adiciona objetos a janela
 		this.add(oLbId);
-		this.add(oLbCod);
+		this.add(oChkBlql);
 		this.add(oLbDesc);
 		this.add(oTxId);
-		this.add(oTxCod);
 		this.add(oTxDesc);
 		
 		oPanel.setBounds(20, 20, 740, 485);
@@ -127,26 +124,25 @@ public class ViewUnidMed extends JInternalFrame implements ActionListener{
 		nOpcx = nOpc;
 		oBrowse = md;
 		if ( nOpc != 3){
-			IUnidMedDao oDao = new UnidMedDao();
-			oModel = oDao.getUnidMedById(nReg);
+			IArmazemDao oDao = new ArmazemDao();
+			oModel = oDao.getArmazemId(nReg);
 			oTxId.setText(Integer.toString(oModel.getId()));
-			oTxCod.setText(oModel.getCod());
 			oTxDesc.setText(oModel.getDesc());
+			oChkBlql.setSelected(oModel.getBloq());
 		}
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
 		if(e.getSource()== oBtCancel){ 
 			if (JOptionPane.showConfirmDialog(null,"Deseja realmente sair?")==JOptionPane.OK_OPTION){	
 				doDefaultCloseAction();
 			}       
         } else { 
         	if(e.getSource()== oBtCommit){        		
-        		if (nOpcx == 3 || nOpcx == 4 || nOpcx == 5){
-        			oModel.setCod(oTxCod.getText());
+        		if (nOpcx == 3 || nOpcx == 4 || nOpcx == 5){        			
         			oModel.setDesc(oTxDesc.getText());
+        			oModel.setBloq(oChkBlql.isSelected());
         			if (oControl.VldCommit(oModel, nOpcx)){
         				if (oControl.ExecCommit(oModel, nOpcx)){         
         			        oBrowse.Refresh();    			 
@@ -159,4 +155,5 @@ public class ViewUnidMed extends JInternalFrame implements ActionListener{
         	}
         }
 	}
+
 }
