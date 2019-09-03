@@ -1,32 +1,33 @@
-package Armazem;
+package Fabricante;
 
 import javax.swing.JOptionPane;
 
 /**
  * Contem as validações relacionadas as regras de negócio
  * @author Danilo Salve
- * @since 23/02/2019
+ * @since 04/03/2019
  * @version 1.0
  */
-public class ControllerArmazem implements IControllerArmazem {
+
+public class ControllerFabricante implements IControllerFabricante{
 	
-	private final IArmazemDao oDao = new ArmazemDao();
+	IFabricanteDao oDao = new FabricanteDao();
 	/**
 	 * Valida ação antes de executar o commit dos dados
 	 * @autor Danilo Salve
-	 * @since 25/02/2019
-	 * @param IModelArmazem oModel 
+	 * @since 04/03/2019
+	 * @param IModelFabricante oModel 
 	 * @param int nOpc - Ação a ser executada
 	 * @version 1.0
 	 */
 	@Override
-	public boolean VldCommit(IModelArmazem oModel, int nOpc) {
+	public boolean VldCommit(IModelFabricante oModel, int nOpc) {
 		boolean lRet = true;
-		if (nOpc == 3 || nOpc == 4){			
-			if (lRet & oModel.getDesc().isEmpty()){
+		if (nOpc == 3 || nOpc == 4){
+			if (lRet & oModel.getPessoa().getNome().trim().isEmpty()){
 				JOptionPane.showMessageDialog(null, "Um ou mais campos obrigatorios"
 	    				+ "\nNão foram preenchidos."
-						+ "\nCampo: Descrição","CAMPO OBRIGATORIO",JOptionPane.ERROR_MESSAGE);
+						+ "\nCampo: Nome","CAMPO OBRIGATORIO",JOptionPane.ERROR_MESSAGE);
 				lRet = false;
 			}
 		}		
@@ -35,13 +36,13 @@ public class ControllerArmazem implements IControllerArmazem {
 	/**
 	 * Executa o commit dos dados
 	 * @autor Danilo Salve
-	 * @since 25/02/2019
-	 * @param IModelArmazem oModel 
+	 * @since 04/03/2019
+	 * @param IModelFabricante oModel 
 	 * @param int nOpc - Ação a ser executada
 	 * @version 1.0
 	 */
 	@Override
-	public boolean ExecCommit(IModelArmazem oModel, int nOpc) {
+	public boolean ExecCommit(IModelFabricante oModel, int nOpc) {
 		boolean lRet = true;
 		
 		switch (nOpc){
@@ -62,7 +63,7 @@ public class ControllerArmazem implements IControllerArmazem {
 			}
 			break;
 		case 5:
-			if (oDao.Remover(oModel.getId())){
+			if (oDao.Remover(oModel.getPessoa().getId())){
 				JOptionPane.showMessageDialog(null, "Cadastro excluido com sucesso!","Sucesso",
 						+ JOptionPane.INFORMATION_MESSAGE);
 			} else {
@@ -73,5 +74,5 @@ public class ControllerArmazem implements IControllerArmazem {
 		return lRet;
 
 	}
-
 }
+

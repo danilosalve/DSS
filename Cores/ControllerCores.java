@@ -1,26 +1,25 @@
-package Armazem;
-
+package Cores;
 import javax.swing.JOptionPane;
 
 /**
  * Contem as validações relacionadas as regras de negócio
  * @author Danilo Salve
- * @since 23/02/2019
+ * @since 01/03/2019
  * @version 1.0
  */
-public class ControllerArmazem implements IControllerArmazem {
-	
-	private final IArmazemDao oDao = new ArmazemDao();
+
+public class ControllerCores implements IControllerCores {
+	private ICoresDao oDao = new CoresDao();
 	/**
 	 * Valida ação antes de executar o commit dos dados
 	 * @autor Danilo Salve
-	 * @since 25/02/2019
-	 * @param IModelArmazem oModel 
+	 * @since 01/03/2019
+	 * @param IModelCores oModel 
 	 * @param int nOpc - Ação a ser executada
 	 * @version 1.0
 	 */
 	@Override
-	public boolean VldCommit(IModelArmazem oModel, int nOpc) {
+	public boolean VldCommit(IModelCores oModel, int nOpc) {
 		boolean lRet = true;
 		if (nOpc == 3 || nOpc == 4){			
 			if (lRet & oModel.getDesc().isEmpty()){
@@ -35,13 +34,13 @@ public class ControllerArmazem implements IControllerArmazem {
 	/**
 	 * Executa o commit dos dados
 	 * @autor Danilo Salve
-	 * @since 25/02/2019
-	 * @param IModelArmazem oModel 
+	 * @since 01/03/2019
+	 * @param IModelCores oModel 
 	 * @param int nOpc - Ação a ser executada
 	 * @version 1.0
 	 */
 	@Override
-	public boolean ExecCommit(IModelArmazem oModel, int nOpc) {
+	public boolean ExecCommit(IModelCores oModel, int nOpc) {
 		boolean lRet = true;
 		
 		switch (nOpc){

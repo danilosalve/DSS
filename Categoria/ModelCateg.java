@@ -1,18 +1,17 @@
-package Armazem;
+package Categoria;
 
-/** Classe Model contem os dados do objeto Armazem
- * @author Danilo Otavio Lima Salve
- * @since 25/02/2019
+/**
+ * Model Categoria
+ * @author Danilo Salve
+ * @since 03/03/2019
  * @version 1.0
- * @see IModelArmazem
  */
 
-public class ModelArmazem implements IModelArmazem {
-
+public class ModelCateg implements IModelCateg {
+	
 	private int nId;
 	private String cDesc;
-	private boolean lBloq;
-	
+
 	@Override
 	public void setId(int nId) {
 		this.nId = nId;
@@ -24,11 +23,6 @@ public class ModelArmazem implements IModelArmazem {
 	}
 
 	@Override
-	public void setBloq(boolean lBloq) {
-		this.lBloq = lBloq;
-	}
-
-	@Override
 	public int getId() {
 		return nId;
 	}
@@ -37,14 +31,8 @@ public class ModelArmazem implements IModelArmazem {
 	public String getDesc() {
 		return cDesc;
 	}
-
-	@Override
-	public boolean getBloq() {
-		return lBloq;
-	}
 	
 	public String toString(){
 		return cDesc;
 	}
-
 }

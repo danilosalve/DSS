@@ -42,4 +42,8 @@ public class ModelUnidMed implements IModelUnidMed {
 	public String getDesc() {
 		return desc;
 	}
+	
+	public String toString(){
+		return cod + " | " + desc;
+	}
 }

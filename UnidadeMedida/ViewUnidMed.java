@@ -1,7 +1,10 @@
 package UnidadeMedida;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 
 import javax.swing.AbstractAction;
@@ -15,7 +18,6 @@ import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
-import javax.swing.table.DefaultTableModel;
 
 import Framework.TamanhoFixoJTextField;
 import UnidadeMedida.BrwUnidMed.UnidMedTableModel;
@@ -28,7 +30,7 @@ import UnidadeMedida.BrwUnidMed.UnidMedTableModel;
  * @see package.UnidadeMedida
  * @see method
  */
-public class ViewUnidMed extends JInternalFrame implements ActionListener{
+public class ViewUnidMed extends JInternalFrame implements ActionListener, FocusListener{
 	
 	private JPanel 	oPanel 		 = new JPanel();
 	private JButton oBtCancel	 = new JButton("Cancelar");
@@ -51,7 +53,7 @@ public class ViewUnidMed extends JInternalFrame implements ActionListener{
 	
 		super(" Unidade de Medida | DSS", false, false ,false , true );  
         this.setSize(800, 590); 
-        
+        DefineLayout();
 		getContentPane().setLayout(null);		
 		getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
 				KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "EscPressed"
@@ -98,7 +100,8 @@ public class ViewUnidMed extends JInternalFrame implements ActionListener{
 		//define o tamanho maximo aceito no JTextField
         oTxCod.setDocument(new TamanhoFixoJTextField(2));
         oTxDesc.setDocument(new TamanhoFixoJTextField(30));
-		
+		oTxDesc.addFocusListener(this);
+		oTxCod.addFocusListener(this);
 		//adiciona objetos a janela
 		this.add(oLbId);
 		this.add(oLbCod);
@@ -159,4 +162,35 @@ public class ViewUnidMed extends JInternalFrame implements ActionListener{
         	}
         }
 	}
+	private void DefineLayout(){
+		oPanel.setBackground(new Color(250, 250, 250));	    
+	    oBtCommit.setBackground(new Color(0, 120, 0));	    
+	    oBtCancel.setBackground(new Color(0, 0, 0));	    
+	    oBtCommit.setForeground(Color.WHITE);
+	    oBtCancel.setForeground(Color.WHITE);
+	}
+	
+	public void focusGained(FocusEvent e) {
+		
+	}
+
+	public void focusLost(FocusEvent e){
+		
+		if (e.getSource() == oTxDesc){
+			if (oTxDesc.getText().trim().equals("") ){
+				oTxDesc.setBackground(new Color(255, 106, 106));
+			} else {
+				oTxDesc.setBackground(Color.WHITE);;
+			}
+		}
+		
+		if (e.getSource() == oTxCod){
+			if (oTxCod.getText().trim().equals("") ){
+				oTxCod.setBackground(new Color(255, 106, 106));
+			} else {
+				oTxCod.setBackground(Color.WHITE);;
+			}
+		}	
+	}
+
 }

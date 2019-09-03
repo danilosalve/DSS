@@ -1,6 +1,7 @@
 package Armazem;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.event.ActionEvent;
@@ -19,6 +20,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.table.AbstractTableModel;
+
 import Framework.FwVldChar;
 
 /**
@@ -119,6 +121,40 @@ public class BrwArmazem extends JInternalFrame{
         oBtAltera.addActionListener(new oBtAlteraListener());
         oBtVisual.addActionListener(new oBtVisualListener());
         oBtPesq.addActionListener(new oBtPesqListener());
+        DefineLayout();
+        oTable.setAutoCreateRowSorter(true);
+        oTable.setSelectionMode(0);
+    }
+    private void DefineLayout(){
+    	//Definição das cores
+    	oTable.setBackground(new Color(250, 250, 250));
+    	oTable.getTableHeader().setBackground(Color.BLACK);
+    	oTable.getTableHeader().setForeground(Color.WHITE);
+    	oCbPesq.setBackground(new Color(250, 250, 250));
+    	oPanelPesq.setBackground(new Color(250, 250, 250));
+    	oPanelBotoes.setBackground(new Color(250, 250, 250));
+    	oBtInclui.setBackground(new Color(0, 120, 0));	    
+    	oBtVisual.setBackground(Color.BLACK);
+    	oBtAltera.setBackground(Color.BLUE);
+    	oBtExclui.setBackground(new Color(128, 0, 0));
+	    oBtPesq.setBackground(new Color(0, 120, 0));
+	    oBtInclui.setForeground(Color.WHITE);
+	    oBtAltera.setForeground(Color.WHITE);
+	    oBtVisual.setForeground(Color.WHITE);
+	    oBtExclui.setForeground(Color.WHITE);
+	    oBtPesq.setForeground(Color.WHITE);
+	    //Adicionar Teclas de Atalho
+	    oBtVisual.setMnemonic(KeyEvent.VK_V);
+	    oBtExclui.setMnemonic(KeyEvent.VK_E);
+	    oBtInclui.setMnemonic(KeyEvent.VK_I);
+	    oBtAltera.setMnemonic(KeyEvent.VK_A);
+	    oBtPesq.setMnemonic(KeyEvent.VK_P);
+	    //Adiciona ToolTip
+	    oBtVisual.setToolTipText("Visualizar registro selecionado");
+	    oBtExclui.setToolTipText("Excluir o registro selecionado");
+	    oBtInclui.setToolTipText("Incluir um novo registro");
+	    oBtAltera.setToolTipText("Alterar o registro selecionado");
+	    oBtPesq.setToolTipText("Pesquisar");
     }
     private class oBtIncluiListener implements ActionListener {
    	 
@@ -276,7 +312,7 @@ public class BrwArmazem extends JInternalFrame{
 	        }
 	    }
     	 
-	    public IModelArmazem getUnidMed(int indiceLinha) {
+	    public IModelArmazem getArmazem(int indiceLinha) {
 	        return linhas.get(indiceLinha);
 	    }
     	 
@@ -305,4 +341,4 @@ public class BrwArmazem extends JInternalFrame{
 	    	}
 	    }
     }
-						}
+}

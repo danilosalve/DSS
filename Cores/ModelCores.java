@@ -1,18 +1,17 @@
-package Armazem;
+package Cores;
 
-/** Classe Model contem os dados do objeto Armazem
+/** Classe Model contem os dados do objeto Cores
  * @author Danilo Otavio Lima Salve
- * @since 25/02/2019
+ * @since 01/03/2019
  * @version 1.0
- * @see IModelArmazem
+ * @see IModelCores
  */
 
-public class ModelArmazem implements IModelArmazem {
-
+public class ModelCores implements IModelCores {
+	
 	private int nId;
 	private String cDesc;
-	private boolean lBloq;
-	
+
 	@Override
 	public void setId(int nId) {
 		this.nId = nId;
@@ -24,11 +23,6 @@ public class ModelArmazem implements IModelArmazem {
 	}
 
 	@Override
-	public void setBloq(boolean lBloq) {
-		this.lBloq = lBloq;
-	}
-
-	@Override
 	public int getId() {
 		return nId;
 	}
@@ -37,14 +31,18 @@ public class ModelArmazem implements IModelArmazem {
 	public String getDesc() {
 		return cDesc;
 	}
+	
+	public ModelCores(){
+		this (0,null);
+	}
 
-	@Override
-	public boolean getBloq() {
-		return lBloq;
+	public ModelCores(int nId, String cDesc) {
+		this.nId = nId;
+		this.cDesc = cDesc;
 	}
 	
 	public String toString(){
 		return cDesc;
 	}
-
+	
 }

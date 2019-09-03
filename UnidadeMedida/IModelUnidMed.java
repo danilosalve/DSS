@@ -15,5 +15,5 @@ public interface IModelUnidMed {
 	public int getId();
 	public String getCod();
 	public String getDesc();
-	
+	public String toString();
 }

@@ -1,12 +1,12 @@
-package UnidadeMedida;
+package Fabricante;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.util.ArrayList;
-import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -20,25 +20,22 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.table.AbstractTableModel;
-
 import Framework.FwVldChar;
+import Pessoa.IPessoa;
+import Pessoa.Pessoa;
 
 /**
- * Browse Cadastro de Unidade de Medida
- * 
- * @since 24/02/2019
+ * Browse Cadastro de Fabricantes 
+ * @since 03/03/2019
  * @author Danilo Salve
- * @see package.UnidadeMedida
- * @see method
  */
-public class BrwUnidMed extends JInternalFrame {
-	
+public class BrwFabricante extends JInternalFrame {
 	private JPanel oPanelFundo;
     private JPanel oPanelBotoes;
     private JPanel oPanelPesq;
     private JTable oTable;
-    private UnidMedTableModel oBrowse;
-    List <IModelUnidMed> lista;
+    private FabricanteTableModel oBrowse;
+    List <IModelFabricante> lista;
     private JScrollPane oScroll;
     private JButton oBtInclui;
     private JButton oBtExclui;
@@ -46,32 +43,33 @@ public class BrwUnidMed extends JInternalFrame {
     private JButton oBtVisual;
     private JButton oBtPesq;
     private JTextField oTxPesq;
-    private JComboBox oCbPesq;    
-    public BrwUnidMed(){
-    	super(" Unidade de Medida | DSS", false, false ,false , true ); 
-        CriaTable();
+    private JComboBox oCbPesq;
+    private IFabricanteDao oDao = new FabricanteDao();
+    
+    public BrwFabricante(){
+    	super(" Fabricantes | DSS", false, false ,false , true ); 
+    	CriaTable();
         CriaJanela();
-    }    
+    }
+    
     public void CriaTable(){        
     	oTable = new JTable(oBrowse);
     	LoadData();        
     }    
-    private void LoadData() {        
-        IUnidMedDao oDao = new UnidMedDao(); 
-        lista = oDao.getUnidMed();
-        oBrowse = new UnidMedTableModel(lista);
+    private void LoadData(){
+         
+        lista = oDao.ListFabricantes();
+        oBrowse = new FabricanteTableModel(lista);
         oTable.setModel(oBrowse);
         TableAjust();
-    } 
+    }
     
     private void TableAjust(){
     	oTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
     	oTable.getColumnModel().getColumn(0).setPreferredWidth(100);
-    	oTable.getColumnModel().getColumn(1).setPreferredWidth(100);
-    	oTable.getColumnModel().getColumn(2).setPreferredWidth(600);
+    	oTable.getColumnModel().getColumn(1).setPreferredWidth(700);
     }
     public void CriaJanela(){
-    	
     	oBtInclui = new JButton("Incluir");
         oBtExclui = new JButton("Excluir");
         oBtAltera = new JButton("Alterar");        
@@ -96,8 +94,7 @@ public class BrwUnidMed extends JInternalFrame {
         oPanelFundo.add(BorderLayout.NORTH, oPanelPesq);    
         
         oCbPesq.setSize(100, 30);
-        oCbPesq.addItem("ID");
-        oCbPesq.addItem("CÓDIGO");
+        oCbPesq.addItem("ID");        
         oCbPesq.addItem("DESCRIÇÃO");
         		
 		getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
@@ -157,11 +154,12 @@ public class BrwUnidMed extends JInternalFrame {
 	    oBtPesq.setToolTipText("Pesquisar");
     }
     private class oBtIncluiListener implements ActionListener {
-    	 
+   	 
         public void actionPerformed(ActionEvent e) {			
-			ViewUnidMed oModelUM = new ViewUnidMed(3, 0, oBrowse);		    
-		    getParent().add(oModelUM);
-		    oModelUM.setVisible(true);
+			ViewFabricante oModelFabricante = new ViewFabricante("Incluir Fabricante");
+			oModelFabricante.oBrowse = oBrowse;
+		    getParent().add(oModelFabricante);
+		    oModelFabricante.setVisible(true);
         }
     }
     private class oBtAlteraListener implements ActionListener {
@@ -172,9 +170,10 @@ public class BrwUnidMed extends JInternalFrame {
         	nLin = oTable.getSelectedRow();
             if (nLin >= 0) {
             	nReg = (int) oTable.getValueAt(nLin,0);
-            	ViewUnidMed oModelUM = new ViewUnidMed(4, nReg, oBrowse);		    
-    		    getParent().add(oModelUM);
-    		    oModelUM.setVisible(true);
+            	ViewFabricante oModelFabricante = new ViewFabricante("Alterar Fabricante - DSS",4, nReg);
+            	oModelFabricante.oBrowse = oBrowse;
+    		    getParent().add(oModelFabricante);
+    		    oModelFabricante.setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(null, "É necessário selecionar uma linha.");
             }
@@ -189,9 +188,9 @@ public class BrwUnidMed extends JInternalFrame {
         	nLin = oTable.getSelectedRow();
             if (nLin >= 0) {
             	nReg = (int) oTable.getValueAt(nLin,0);
-            	ViewUnidMed oModelUM = new ViewUnidMed(2, nReg, oBrowse);		    
-    		    getParent().add(oModelUM);
-    		    oModelUM.setVisible(true);
+            	ViewFabricante oModelFabricante = new ViewFabricante("Visualizar Fabricante - DSS",2, nReg);	
+    		    getParent().add(oModelFabricante);
+    		    oModelFabricante.setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(null, "É necessário selecionar uma linha.");
             }
@@ -206,9 +205,10 @@ public class BrwUnidMed extends JInternalFrame {
         	nLin = oTable.getSelectedRow();
             if (nLin >= 0) {
             	nReg = (int) oTable.getValueAt(nLin,0);
-            	ViewUnidMed oModelUM = new ViewUnidMed(5, nReg, oBrowse);		    
-    		    getParent().add(oModelUM);
-    		    oModelUM.setVisible(true);
+            	ViewFabricante oModelFabricante = new ViewFabricante("Excluir Fabricante - DSS",5, nReg);
+            	oModelFabricante.oBrowse = oBrowse;
+    		    getParent().add(oModelFabricante);
+    		    oModelFabricante.setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(null, "É necessário selecionar uma linha.");
             }
@@ -219,9 +219,9 @@ public class BrwUnidMed extends JInternalFrame {
         public void actionPerformed(ActionEvent e) {
         	int nIndex = oCbPesq.getSelectedIndex();
         	String cPesq = oTxPesq.getText();
-        	IModelUnidMed oModel = new ModelUnidMed();
-        	IUnidMedDao oDao = new UnidMedDao();
-        	List<IModelUnidMed> oLstUnidMed = new ArrayList<IModelUnidMed>();
+        	IModelFabricante oModel = new ModelFabricante();
+        	
+        	List<IModelFabricante> oLista = new ArrayList<IModelFabricante>();
         	if (oTxPesq.getText().isEmpty()){
         		oBrowse.Refresh();
         	} else {
@@ -229,51 +229,44 @@ public class BrwUnidMed extends JInternalFrame {
         		case 0:
         			oBrowse.removeAll();        			
         			if (FwVldChar.isNumeric(cPesq)){
-        				oModel = oDao.getUnidMedById(Integer.parseInt(cPesq));
-            			if (oModel.getId()> 0){
+        				oModel = oDao.getFabricanteId(Integer.parseInt(cPesq));
+            			if (oModel.getPessoa().getId()> 0){
             				oBrowse.addLine(oModel);
             			}        				
         			}        			
         			break;
         		case 1:
         			oBrowse.removeAll();        			
-        			oModel = oDao.getUnidMedCod(cPesq);
-            		if (oModel.getId()> 0){
-            			oBrowse.addLine(oModel);            		        				
-        			}        			
-        			break;
-        		case 2:
-        			oBrowse.removeAll();
-        			oLstUnidMed = oDao.getUnidMedDesc(cPesq);
-        			for (int i = 0; i < oLstUnidMed.size() ; i++){
-        				oModel = oLstUnidMed.get(i);
-        				if (oModel.getId()> 0){
+        			oLista = oDao.getFabricantesDesc(cPesq);
+        			for (int i = 0; i < oLista.size() ; i++){
+        				oModel = oLista.get(i);
+        				if (oModel.getPessoa().getId()> 0){
                 			oBrowse.addLine(oModel);            		        				
             			}        			
         			}
-        			break;
+            		break;
         		}
         	}
         		
         }
-    }   
-    public class UnidMedTableModel extends AbstractTableModel{
+    }
+    
+    public class FabricanteTableModel extends AbstractTableModel{
     	
-    	private static final int COL_ID = 0;
-    	private static final int COL_COD = 1;
-    	private static final int COL_DESC = 2;	
-    	private String[] colunas = new String[]{"Id", "Código", "Descrição"};
-    	List<IModelUnidMed> linhas;
+		private static final int COL_ID = 0;    	
+    	private static final int COL_DESC = 1;	
+    	private String[] colunas = new String[]{"Id", "Nome"};
+    	List<IModelFabricante> linhas;  	
     	
     	public void Refresh() {        
-            IUnidMedDao oDao = new UnidMedDao(); 
-            lista = oDao.getUnidMed();
-            oBrowse = new UnidMedTableModel(lista);
+             
+            lista = oDao.ListFabricantes();
+            oBrowse = new FabricanteTableModel(lista);
             oTable.setModel(oBrowse);
             TableAjust();
         }  
     	
-    	public UnidMedTableModel(List<IModelUnidMed> oModel) {
+    	public FabricanteTableModel(List<IModelFabricante> oModel) {
     		this.linhas = new ArrayList<>(oModel);
     	}    	 
 	    public int getRowCount() {
@@ -301,40 +294,39 @@ public class BrwUnidMed extends JInternalFrame {
     	 
 	    public Object getValueAt(int row, int column) {
 	 
-	        IModelUnidMed m = linhas.get(row);
+	        IModelFabricante m = linhas.get(row);
 	 
 	        if (column == COL_ID) {
-	            return m.getId();
-	        } else if (column == COL_COD) {
-	            return m.getCod();
+	            return m.getPessoa().getId();	        
 	        } else if (column == COL_DESC) {
-	            return m.getDesc();    	        
+	            return m.getPessoa().getNome();    	        
 	        }
 	        return "";
 	    }
     	 
 	    public void setValueAt(Object aValue, int row, int column) {
-	    	IModelUnidMed u = linhas.get(row);
+	    	IModelFabricante u = linhas.get(row);
+	    	IPessoa oPessoa = new Pessoa();
 	        if (column == COL_ID) {
-	            u.setId((Integer) aValue);
-	        } else if (column == COL_COD) {
-	            u.setCod(aValue.toString());
+	        	oPessoa.setId((Integer) aValue);
+	            u.setPessoa(oPessoa);
 	        } else if (column == COL_DESC) {
-	            u.setDesc(aValue.toString());
+	        	oPessoa.setNome(aValue.toString());
+	            u.setPessoa(oPessoa);
 	        }
 	    }
     	 
-	    public IModelUnidMed getUnidMed(int indiceLinha) {
+	    public IModelFabricante getArmazem(int indiceLinha) {
 	        return linhas.get(indiceLinha);
 	    }
     	 
-	    public void addLine(IModelUnidMed oModel) {
+	    public void addLine(IModelFabricante oModel) {
 	        linhas.add(oModel);
 	        int ultimoIndice = getRowCount() - 1;
 	        fireTableRowsInserted(ultimoIndice, ultimoIndice);    	 
 	    }
 	 
-	    public void updateLine(int indiceLinha, IModelUnidMed oModel) {
+	    public void updateLine(int indiceLinha, IModelFabricante oModel) {
 	        linhas.set(indiceLinha, oModel);
 	        fireTableRowsUpdated(indiceLinha, indiceLinha);    	 
 	    }

@@ -16,6 +16,10 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
 import Armazem.BrwArmazem;
+import Categoria.BrwCateg;
+import Cores.BrwCores;
+import Fabricante.BrwFabricante;
+import Tamanho.BrwTamanho;
 import UnidadeMedida.BrwUnidMed;
 
 /**
@@ -33,8 +37,11 @@ public class Menu extends JFrame implements ActionListener, TreeSelectionListene
    private final JDesktopPane jdPane = new JDesktopPane();
    private final JTree tree = new JTree();
    private JTextField txProcurar = new JTextField();
-   private BrwUnidMed oModelUM;
    private BrwArmazem oBrowseAmz;
+   private BrwCores oBrowseCor;
+   private BrwCateg oBrowseCateg;
+   private BrwTamanho oBrowseTamanho;
+   private BrwFabricante oBrowseFabricante;
    public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -88,7 +95,7 @@ public class Menu extends JFrame implements ActionListener, TreeSelectionListene
 	  contentPane.setLayout(new BorderLayout(0, 6));
 	  setContentPane(contentPane);
 	  jdPane.setBorder(new LineBorder(new Color(070, 130, 180)));
-	  jdPane.setBackground(new Color(255, 255, 255));
+	  jdPane.setBackground(new Color(250, 250, 250));
   
 	  txProcurar.setBounds(250,010,600,050);
 	  txProcurar.setText(" Digite aqui para procurar um programa");
@@ -111,16 +118,19 @@ public class Menu extends JFrame implements ActionListener, TreeSelectionListene
 						nCRM = new DefaultMutableTreeNode("CRM");
 							nCRM.add(new DefaultMutableTreeNode("Pessoas"));
 							nCRM.add(new DefaultMutableTreeNode("Contatos"));
-							nCRM.add(new DefaultMutableTreeNode("Endereços"));
 						add(nCRM);
 						nEstoque = new DefaultMutableTreeNode("Estoque");
-							nEstoque.add(new DefaultMutableTreeNode("Saldo"));
+							nEstoque.add(new DefaultMutableTreeNode("Armazens"));
 							nEstoque.add(new DefaultMutableTreeNode("Requisição"));
+							nEstoque.add(new DefaultMutableTreeNode("Saldo"));							
 						add(nEstoque);
-						nSuprimentos = new DefaultMutableTreeNode("Suprimentos");
-							nSuprimentos.add(new DefaultMutableTreeNode("Armazem"));
-							nSuprimentos.add(new DefaultMutableTreeNode("Produto"));							
-							nSuprimentos.add(new DefaultMutableTreeNode("Unidade de Medida"));
+						nSuprimentos = new DefaultMutableTreeNode("Suprimentos");							
+							nSuprimentos.add(new DefaultMutableTreeNode("Categorias"));
+							nSuprimentos.add(new DefaultMutableTreeNode("Cores"));
+							nSuprimentos.add(new DefaultMutableTreeNode("Fabricantes"));
+							nSuprimentos.add(new DefaultMutableTreeNode("Produtos"));						
+							nSuprimentos.add(new DefaultMutableTreeNode("Unidades de Medida"));
+							nSuprimentos.add(new DefaultMutableTreeNode("Tamanhos"));
 						add(nSuprimentos);
 					}
 				}
@@ -174,38 +184,10 @@ public class Menu extends JFrame implements ActionListener, TreeSelectionListene
     */  
    public void actionPerformed(ActionEvent evt) {
 	   if (evt.getSource() == txProcurar){
-			String cBusca = txProcurar.getText().toUpperCase();
-			switch (cBusca){
-			case "UNIDADE DE MEDIDA":
-				BrwUnidMed oModelUM = new BrwUnidMed();
-				if(!oModelUM.isVisible()){
-					oModelUM.setVisible(true);
-					centralizaForm(oModelUM);
-					jdPane.add(oModelUM);
-					try{
-						oModelUM.setSelected(true);
-					} catch(PropertyVetoException e){
-				        e.printStackTrace();
-				    }
-				} else {
-					centralizaForm(oModelUM);
-					jdPane.add(oModelUM);
-				}
-				break;
-			case "ARMAZEM":
-				oBrowseAmz = new BrwArmazem();
-				
-				if(!oBrowseAmz.isVisible()){
-					oBrowseAmz.setVisible(true);
-					centralizaForm(oBrowseAmz);
-					jdPane.add(oBrowseAmz);
-				} else {
-					centralizaForm(oBrowseAmz);
-					jdPane.add(oBrowseAmz);
-				}
-				break;			
-			default:
-				JOptionPane.showMessageDialog(null, "Dados não encontrados", "Não há dados", JOptionPane.INFORMATION_MESSAGE);
+			String cBusca = txProcurar.getText();
+			if (Menu(cBusca)){			
+			} else {
+				JOptionPane.showMessageDialog(null, "Menu não localizado", "Não há dados", JOptionPane.INFORMATION_MESSAGE);
 			}
 		}
    }
@@ -222,33 +204,7 @@ public class Menu extends JFrame implements ActionListener, TreeSelectionListene
    public void valueChanged(TreeSelectionEvent e) {
 	   
 		String node = e.getNewLeadSelectionPath().getLastPathComponent().toString();
-		
-		switch(node){
-		case "Unidade de Medida":
-			BrwUnidMed oModelUM = new BrwUnidMed();
-			
-			if(!oModelUM.isVisible()){
-				oModelUM.setVisible(true);
-				centralizaForm(oModelUM);
-				jdPane.add(oModelUM);
-			} else {
-				centralizaForm(oModelUM);
-				jdPane.add(oModelUM);
-			}
-		break;
-		case "Armazem":
-			oBrowseAmz = new BrwArmazem();
-			
-			if(!oBrowseAmz.isVisible()){
-				oBrowseAmz.setVisible(true);
-				centralizaForm(oBrowseAmz);
-				jdPane.add(oBrowseAmz);
-			} else {
-				centralizaForm(oBrowseAmz);
-				jdPane.add(oBrowseAmz);
-			}
-		break;
-		}		
+		Menu(node);		
 	}
 
    /**
@@ -300,4 +256,84 @@ public class Menu extends JFrame implements ActionListener, TreeSelectionListene
 	public void mouseReleased(MouseEvent arg0) {
 		
 	}   
+	
+	private boolean Menu(String cMenu){
+		boolean lRet = false;
+		cMenu = cMenu.toUpperCase();
+		switch(cMenu){
+		case "UNIDADES DE MEDIDA":
+			BrwUnidMed oModelUM = new BrwUnidMed();
+			lRet = true;
+			if(!oModelUM.isVisible()){
+				oModelUM.setVisible(true);
+				centralizaForm(oModelUM);
+				jdPane.add(oModelUM);
+			} else {
+				centralizaForm(oModelUM);
+				jdPane.add(oModelUM);
+			}
+		break;
+		case "ARMAZENS":
+			oBrowseAmz = new BrwArmazem();
+			lRet = true;
+			if(!oBrowseAmz.isVisible()){
+				oBrowseAmz.setVisible(true);
+				centralizaForm(oBrowseAmz);
+				jdPane.add(oBrowseAmz);
+			} else {
+				centralizaForm(oBrowseAmz);
+				jdPane.add(oBrowseAmz);
+			}
+		break;
+		case "CORES":
+			oBrowseCor = new BrwCores();						
+			lRet = true;
+			if(!oBrowseCor.isVisible()){
+				oBrowseCor.setVisible(true);
+				centralizaForm(oBrowseCor);
+				jdPane.add(oBrowseCor);
+			} else {
+				centralizaForm(oBrowseCor);
+				jdPane.add(oBrowseCor);
+			}
+		break;
+		case "CATEGORIAS":
+			oBrowseCateg = new BrwCateg();						
+			lRet = true;
+			if(!oBrowseCateg.isVisible()){
+				oBrowseCateg.setVisible(true);
+				centralizaForm(oBrowseCateg);
+				jdPane.add(oBrowseCateg);
+			} else {
+				centralizaForm(oBrowseCateg);
+				jdPane.add(oBrowseCateg);
+			}
+		break;
+		case "TAMANHOS":
+			oBrowseTamanho = new BrwTamanho();						
+			lRet = true;
+			if(!oBrowseTamanho.isVisible()){
+				oBrowseTamanho.setVisible(true);
+				centralizaForm(oBrowseTamanho);
+				jdPane.add(oBrowseTamanho);
+			} else {
+				centralizaForm(oBrowseTamanho);
+				jdPane.add(oBrowseTamanho);
+			}
+		break;
+		case "FABRICANTES":
+			oBrowseFabricante = new BrwFabricante();						
+			lRet = true;
+			if(!oBrowseFabricante.isVisible()){
+				oBrowseFabricante.setVisible(true);
+				centralizaForm(oBrowseFabricante);
+				jdPane.add(oBrowseFabricante);
+			} else {
+				centralizaForm(oBrowseFabricante);
+				jdPane.add(oBrowseFabricante);
+			}
+		break;
+		}		
+		return lRet;
+	}
 }

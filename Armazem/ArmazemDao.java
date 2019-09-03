@@ -5,12 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.JOptionPane;
-
 import System.SQLConect;
-import UnidadeMedida.IModelUnidMed;
-import UnidadeMedida.ModelUnidMed;
+
 
 /**
  * Executa os comandos SQL para atualização da base de  dados
@@ -168,7 +165,7 @@ public class ArmazemDao implements IArmazemDao {
             }
             SQLConect.fechaConexao(conn, pstm, rs);
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao listar Unidade de medida" + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao listar Armazem" + e.getMessage());
         }
         return lRet;
 	}
@@ -273,7 +270,7 @@ public class ArmazemDao implements IArmazemDao {
             }
             SQLConect.fechaConexao(conn, pstm, rs);
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao listar Unidade de medida " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao listar Armazem " + e.getMessage());
         }    	
         return oLista;
 	}

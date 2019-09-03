@@ -15,5 +15,6 @@ public interface IModelArmazem {
 	public int getId();
 	public String getDesc();
 	public boolean getBloq();
+	public String toString();
 	
 }
